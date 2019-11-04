@@ -10,10 +10,10 @@ CFLAGS=-I $(INC)
 all: $(SRC:.c=)
 
 %.elf: $(OBJ)
-	gcc $(OBJ) -o $@
+	gcc $(OBJ) -o $@ -lm
 
 %.o: %.c
-	gcc -c $< -I inc/ -o $@
+	gcc -c $^ $(CFLAGS) -o $@
 
 clean:
 	rm -f $(OBJ) $(SRC:.c=)
