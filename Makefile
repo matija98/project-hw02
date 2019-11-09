@@ -1,21 +1,24 @@
+EXESRC=$(wildcard exesrc/*c)
 SRC=$(wildcard src/*c)
-OBJ=$(patsubst %c, %o, $(SRC))
-INC=inc/
 
+OBJ=$(patsubst %c, %o, $(SRC))
+EXEOBJ=$(patsubst %c, %o, $(EXESRC))
+EXE=$(patsubst %c, %elf, $(EXESRC))
+
+INC=inc/
 CFLAGS=-I $(INC)
-#EXE=exe/app.elf
 
 .SECONDARY:
 
-all: $(SRC:.c=)
+all: $(EXE)
 
-%.elf: $(OBJ)
-	gcc $(OBJ) -o $@ -lm
+$(EXE): $(EXEOBJ)
+	gcc -DEXECUTABLE_NAME=\"$@\" $< -o $@ -lm
 
-%.o: %.c
-	gcc -c $^ $(CFLAGS) -o $@
+%.o: $(SRC) $(EXESRC)
+	gcc -c $^ $(CFLAGS) -o $@ -lm
 
 clean:
-	rm -f $(OBJ) $(SRC:.c=)
+	rm -f $(OBJ) $(EXEOBJ)
 
-run: ./exe/*.elf
+#run: ./exe/*.elf
